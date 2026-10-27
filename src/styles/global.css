@@ -1,0 +1,38 @@
+:root {
+    --color-primary: #8B5CF6;
+    --color-background: #0D0D12;
+    --color-surface: #20202B;
+    --color-text-primary: #F8F7FF;
+    --color-text-secondary: #A5A3B5;
+    --color-accent: #22D3EE;
+
+    font-family: 'Inter', Arial, sans-serif;
+    color-scheme: dark;
+
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body #root {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body{
+    min-width: 20rem;
+    background-color: var(--color-background);
+}
+
+button, input{
+    font: inherit;
+}
+
+button{
+    cursor: pointer;
+}
