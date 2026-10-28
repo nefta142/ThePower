@@ -24,15 +24,21 @@ body #root {
     min-height: 100%;
 }
 
-body{
+body {
     min-width: 20rem;
     background-color: var(--color-background);
 }
 
-button, input{
+button,
+input {
     font: inherit;
 }
 
-button{
+button {
     cursor: pointer;
+}
+
+.app-content {
+    min-height: 100dvh;
+    padding: 1.5rem 1rem 6rem;
 }
