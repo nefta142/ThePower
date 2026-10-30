@@ -6,6 +6,9 @@
     --color-text-secondary: #A5A3B5;
     --color-accent: #22D3EE;
 
+    --color-error-text: #FFD5DB;
+    --color-error-background: #491D2A;
+
     font-family: 'Inter', Arial, sans-serif;
     color-scheme: dark;
 
