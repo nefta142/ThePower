@@ -1,0 +1,17 @@
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  min-height: calc(100dvh - 9rem);
+  padding: 1rem 0;
+}
+
+.register .login-header {
+  margin-bottom: 1.5rem;
+}
+
+.register .login-form {
+  gap: 1rem;
+}
