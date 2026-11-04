@@ -15,3 +15,9 @@
 .register .login-form {
   gap: 1rem;
 }
+
+.register-hint {
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
