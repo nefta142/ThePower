@@ -6,6 +6,8 @@ import Favorites from "./pages/Favorites"
 import Help from "./pages/Help"
 import NotFound from "./pages/NotFound"
 import BottomNav from './components/BottomNav';
+import ProtectedRoute from './components/PotectedRoute';
+import Profile from './pages/Profile';
 function App() {
   return (
     <>
@@ -16,6 +18,9 @@ function App() {
           <Route path='/registro' element={<Register />} />
           <Route path='/favoritos' element={<Favorites />} />
           <Route path='/ayuda' element={<Help />} />
+          <Route element={<ProtectedRoute/>}>
+            <Route path='/profile' element={<Profile />}/>
+          </Route>
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
