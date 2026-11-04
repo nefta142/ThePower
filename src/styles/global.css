@@ -45,3 +45,38 @@ button {
     min-height: 100dvh;
     padding: 1.5rem 1rem 6rem;
 }
+
+
+:root {
+    --color-primary: #8B5CF6;
+    --color-background: #0D0D12;
+    --color-surface: #20202B;
+    --color-text-primary: #F8F7FF;
+    --color-text-secondary: #A5A3B5;
+    --color-accent: #22D3EE;
+
+    /* Mensajes de error */
+    --color-error-text: #FFD5DB;
+    --color-error-background: #491D2A;
+
+    font-family: 'Inter', Arial, sans-serif;
+    color-scheme: dark;
+
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+}
+
+
+:root[data-theme="light"] {
+    --color-primary: #7C3AED;
+    --color-background: #FAF9FF;
+    --color-surface: #F0EDF7;
+    --color-text-primary: #181622;
+    --color-text-secondary: #625F70;
+    --color-accent: #007F95;
+
+    --color-error-text: #8C1730;
+    --color-error-background: #FCE8ED;
+
+    color-scheme: light;
+}

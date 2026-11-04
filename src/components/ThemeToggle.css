@@ -1,0 +1,38 @@
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+
+    border: none;
+    border-radius: 50%;
+
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.theme-toggle svg {
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.theme-toggle:hover {
+    color: var(--color-primary);
+}
+
+.theme-toggle:focus-visible {
+    outline: 0.125rem solid var(--color-accent);
+    outline-offset: 0.125rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .theme-toggle {
+        transition: none;
+    }
+}

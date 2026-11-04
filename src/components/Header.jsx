@@ -3,6 +3,7 @@ import { Search, UserRound } from "lucide-react";
 import FeedBack from "./FeedBack";
 import "./Header.css"
 import { useState } from "react";
+import ThemeToggle from "./ThemeToggle";
 
 function Header() {
     const [message, setMesage] = useState("");
@@ -13,6 +14,7 @@ function Header() {
                 <img src="/images/Logo.png" className="header-logo-img"></img>
                 The Power</Link>
                 <div className="header-actions">
+                    <ThemeToggle />
                     <button type="button" className="header-search" aria-label="Buscar música" onClick={() => setMesage("La búsqueda estará disponible próximamnete.")}>
                         <Search aria-hidden="true" />
                     </button>
