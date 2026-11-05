@@ -9,6 +9,9 @@
     --color-error-text: #FFD5DB;
     --color-error-background: #491D2A;
 
+    --color-success-text: #BBF7D0;
+    --color-success-background: #14532D;
+
     font-family: 'Inter', Arial, sans-serif;
     color-scheme: dark;
 
@@ -55,7 +58,6 @@ button {
     --color-text-secondary: #A5A3B5;
     --color-accent: #22D3EE;
 
-    /* Mensajes de error */
     --color-error-text: #FFD5DB;
     --color-error-background: #491D2A;
 
@@ -77,6 +79,9 @@ button {
 
     --color-error-text: #8C1730;
     --color-error-background: #FCE8ED;
+
+    --color-success-text: #166534;
+    --color-success-background: #DCFCE7;
 
     color-scheme: light;
 }

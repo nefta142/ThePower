@@ -21,3 +21,19 @@
   font-size: 0.75rem;
   line-height: 1.4;
 }
+
+.register-success {
+  margin: 0;
+  padding: 0.75rem;
+
+  background-color: var(--color-success-background);
+  color: var(--color-success-text);
+
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.register .login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

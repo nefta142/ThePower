@@ -1,46 +1,64 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { registrarUsuario } from "../services/authService";
 
 import "./Register.css"
 import "./Login.css"
 
 function registro() {
-    const [name, setName] = useState();
-    const [email, setEmail] = useState();
-    const [pass, setPass] = useState();
-    const [confirmPass, setConfirmPass] = useState();
 
-    const [showPass, setShowPass] = useState();
-    const [error, setError] = useState();
+    const [userName, setUserName] = useState("");
+    const [name, setName] = useState("");
+    const [lastName1, setLastName1] = useState("");
+    const [lastName2, setLastName2] = useState("");
+    const [email, setEmail] = useState("");
+    const [pass, setPass] = useState("");
+    const [confirmPass, setConfirmPass] = useState("");
 
+    const [showPass, setShowPass] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const [loading, setLoading] = useState(false);
 
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
+        setError("");
+        setSuccess("");
+
         if (
+            !userName.trim() ||
             !name.trim() ||
+            !lastName1.trim() ||
             !email.trim() ||
-            !pass.trim() ||
-            !confirmPass.trim()
+            !pass ||
+            !confirmPass
         ) {
-            setError("Todos los campos son obligatorios.");
+            setError("Todos los campos obligatorios deben rellenarse.");
             return;
         }
 
-        if (name.trim().length < 2) {
-            setError("Introduce un nombre válido.");
+        if (userName.trim().length > 25) {
+            setError("El nombre de usuario no puede superar 25 caracteres.");
             return;
         }
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setError("Introduce un correo electrónico válido.");
+        if ([name, lastName1, lastName2].some(
+            (value) => value.trim().length > 50
+        )) {
+            setError("Los nombres y apellidos no pueden superar 50 caracteres.");
             return;
         }
 
-        if (pass.length < 8) {
-            setError("La contraseña debe tener al menos 8 caracteres.");
+        if (email.trim().length > 50 ||
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+            setError("Introduce un correo electrónico válido de hasta 50 caracteres.");
+            return;
+        }
+
+        if (pass.length < 8 || pass.length > 72) {
+            setError("La contraseña debe tener entre 8 y 72 caracteres.");
             return;
         }
 
@@ -49,8 +67,37 @@ function registro() {
             return;
         }
 
-        setError("El registro todavía no está conectado al servidor.");
+        const userData = {
+            nombreUsuario: userName.trim(),
+            nombre: name.trim(),
+            apellido1: lastName1.trim(),
+            apellido2: lastName2.trim(),
+            email: email.trim(),
+            contrasena: pass
+        };
+
+        try {
+            setLoading(true);
+
+            const response = await registrarUsuario(userData);
+
+            setSuccess(response?.mensaje || "Usuario registrado correctamente.");
+
+            setUserName("");
+            setName("");
+            setLastName1("");
+            setLastName2("");
+            setEmail("");
+            setPass("");
+            setConfirmPass("");
+
+        } catch (err) {
+            setError(err.message || "No se pudo completar el registro.");
+        } finally {
+            setLoading(false);
+        }
     };
+
 
     return (
         <main className="register">
@@ -71,12 +118,31 @@ function registro() {
 
                 <form className="login-form" onSubmit={handleSubmit} noValidate>
 
+
                     <div className="form-group">
-                        <label htmlFor="name">Nombre completo</label>
+                        <label htmlFor="userName">Nombre de usuario</label>
+                        <input
+                            id="userName"
+                            type="text"
+                            placeholder="Introduce tu nombre de usuario"
+                            autoComplete="username"
+                            maxLength={25}
+                            value={userName}
+                            onChange={(e) => {
+                                setUserName(e.target.value);
+                                setError("");
+                                setSuccess("");
+                            }}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="name">Nombre</label>
                         <input
                             id="name"
                             type="text"
-                            placeholder="Tu nombre y apellidos"
+                            placeholder="Tu nombre"
                             autoComplete="name"
                             value={name}
                             onChange={(e) => {
@@ -84,6 +150,44 @@ function registro() {
                                 setError("");
                             }}
                             required
+                        />
+                    </div>
+
+
+                    <div className="form-group">
+                        <label htmlFor="lastName1">Primer apellido</label>
+                        <input
+                            id="lastName1"
+                            type="text"
+                            placeholder="Introduce tu primer apellido"
+                            autoComplete="family-name"
+                            maxLength={50}
+                            value={lastName1}
+                            onChange={(e) => {
+                                setLastName1(e.target.value);
+                                setError("");
+                                setSuccess("");
+                            }}
+                            required
+                        />
+                    </div>
+
+
+                    <div className="form-group">
+                        <label htmlFor="lastName2">
+                            Segundo apellido (opcional)
+                        </label>
+                        <input
+                            id="lastName2"
+                            type="text"
+                            placeholder="Introduce tu segundo apellido"
+                            maxLength={50}
+                            value={lastName2}
+                            onChange={(e) => {
+                                setLastName2(e.target.value);
+                                setError("");
+                                setSuccess("");
+                            }}
                         />
                     </div>
 
@@ -100,10 +204,10 @@ function registro() {
                                 setError("");
                             }}
                             required
+                            maxLength={50}
                         />
                     </div>
 
-                    {/* Contraseña */}
                     <div className="form-group">
                         <label htmlFor="register-pass">Contraseña</label>
 
@@ -119,6 +223,8 @@ function registro() {
                                     setError("");
                                 }}
                                 required
+                                minLength={8}
+                                maxLength={72}
                             />
 
                             <button
@@ -156,6 +262,7 @@ function registro() {
                                     setError("");
                                 }}
                                 required
+                                maxLength={72}
                             />
                         </div>
                     </div>
@@ -166,8 +273,18 @@ function registro() {
                         </p>
                     )}
 
-                    <button type="submit" className="login-button">
-                        Crear cuenta
+                    {success && (
+                        <p className="register-success" role="status">
+                            {success}
+                        </p>
+                    )}
+
+                    <button
+                        type="submit"
+                        className="login-button"
+                        disabled={loading}
+                    >
+                        {loading ? "Registrando..." : "Crear cuenta"}
                     </button>
 
                 </form>

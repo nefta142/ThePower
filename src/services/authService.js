@@ -1,37 +1,67 @@
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function registrarUsuario(datosUsuario) {
+async function obtenerCsrf() {
   const respuesta = await fetch(
-    `${API_URL}/api/usuarios/registro`,
+    `${API_URL}/api/usuarios/csrf`,
     {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(datosUsuario),
+      method: "GET",
+      credentials: "include"
     }
   );
 
-  const texto = await respuesta.text();
-
-  let datos;
-
-  try {
-    datos = texto ? JSON.parse(texto) : null;
-  } catch {
-    datos = texto;
-  }
-
   if (!respuesta.ok) {
-    throw new Error(
-      typeof datos === "string"
-        ? datos || "No se ha podido registrar el usuario"
-        : datos?.message ||
-          datos?.mensaje ||
-          "No se ha podido registrar el usuario"
-    );
+    throw new Error("No se pudo obtener el token CSRF");
   }
 
-  return datos;
+  return respuesta.json();
+}
+
+export async function registrarUsuario(datosUsuario) {
+  try {
+    const csrf = await obtenerCsrf();
+
+    const respuesta = await fetch(
+      `${API_URL}/api/usuarios/registro`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          [csrf.headerName]: csrf.token
+        },
+        body: JSON.stringify(datosUsuario)
+      }
+    );
+
+    const texto = await respuesta.text();
+
+    let datos;
+    try {
+      datos = texto ? JSON.parse(texto) : null;
+    } catch {
+      datos = texto;
+    }
+
+    if (!respuesta.ok) {
+      throw new Error(
+        typeof datos === "string"
+          ? datos || "Error al registrar el usuario"
+          : datos?.mensaje ||
+            datos?.message ||
+            "Error al registrar el usuario"
+      );
+    }
+
+    return datos;
+
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(
+        "No se puede conectar con el servidor Java.", { cause: error }
+      );
+    }
+
+    throw error;
+  }
 }
