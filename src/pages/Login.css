@@ -171,3 +171,8 @@
     outline: 0.15rem solid var(--color-acent);
     outline-offset: 0.17rem;
 }
+
+.login-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

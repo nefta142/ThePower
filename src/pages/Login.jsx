@@ -1,30 +1,55 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import "./Login.css"
+import { loginUsuario } from "../services/authService";
 
-
-function login() {
+function Login() {
 
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
-    const [showPass, setShowPass] = useState("");
+    const [showPass, setShowPass] = useState(false);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
 
-        if (!email.trim() || !pass.trim()) {
-            setError("Todos los campos son obligatorios");
+        if (!email.trim() || !pass) {
+            setError("Todos los campos son obligatorios.");
             return;
         }
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setError("Introduce un correo electrónico válido");
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+            setError("Introduce un correo electrónico válido.");
             return;
         }
-        setError("El incio de sesión estará disponoble próximamente");
-    }
+
+        try {
+            setLoading(true);
+
+            await loginUsuario(email, pass);
+
+            navigate("/", {
+                replace: true,
+                state: {
+                    message: "Has iniciado sesión correctamente."
+                }
+            });
+
+        } catch (err) {
+            setError(
+                err.message || "No se ha podido iniciar sesión."
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <main className="login">
             <div className="login-container">
@@ -58,7 +83,13 @@ function login() {
                         </p>
                     )}
 
-                    <button type="submit" className="login-button">Iniciar sesión</button>
+                    <button
+                        type="submit"
+                        className="login-button"
+                        disabled={loading}
+                    >
+                        {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+                    </button>
                 </form>
                 <p className="login-register">¿Aún no tienes cuenta?{" "}
                     <Link to="/registro" className="login-register">Regístrate</Link>
@@ -69,4 +100,4 @@ function login() {
     );
 }
 
-export default login
+export default Login

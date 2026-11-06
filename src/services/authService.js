@@ -48,8 +48,8 @@ export async function registrarUsuario(datosUsuario) {
         typeof datos === "string"
           ? datos || "Error al registrar el usuario"
           : datos?.mensaje ||
-            datos?.message ||
-            "Error al registrar el usuario"
+          datos?.message ||
+          "Error al registrar el usuario"
       );
     }
 
@@ -65,3 +65,58 @@ export async function registrarUsuario(datosUsuario) {
     throw error;
   }
 }
+
+
+export async function loginUsuario(email, password) {
+  try {
+    const csrf = await obtenerCsrf();
+
+    const respuesta = await fetch(
+      `${API_URL}/api/usuarios/login`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          [csrf.headerName]: csrf.token
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          contrasena: password
+        })
+      }
+    );
+
+    const texto = await respuesta.text();
+
+    let datos;
+    try {
+      datos = texto ? JSON.parse(texto) : null;
+    } catch {
+      datos = texto;
+    }
+
+    if (!respuesta.ok) {
+      throw new Error(
+        typeof datos === "string"
+          ? datos || "No se pudo iniciar sesión"
+          : datos?.mensaje ||
+          datos?.message ||
+          "Correo o contraseña incorrectos"
+      );
+    }
+
+    return datos;
+
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(
+        "No se puede conectar con el servidor Java.",
+        { cause: error }
+      );
+    }
+
+    throw error;
+  }
+}
+
