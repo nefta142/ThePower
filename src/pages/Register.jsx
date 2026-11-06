@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { registrarUsuario } from "../services/authService";
 
 import "./Register.css"
 import "./Login.css"
 
-function registro() {
+function Register() {
 
     const [userName, setUserName] = useState("");
     const [name, setName] = useState("");
@@ -20,6 +20,8 @@ function registro() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -79,10 +81,14 @@ function registro() {
         try {
             setLoading(true);
 
-            const response = await registrarUsuario(userData);
+            await registrarUsuario(userData);
 
-            setSuccess(response?.mensaje || "Usuario registrado correctamente.");
-
+            navigate("/",{
+                replace: true,
+                state: {
+                    message: "Usuario registrado correctamente"
+                }
+            });
             setUserName("");
             setName("");
             setLastName1("");
@@ -299,4 +305,4 @@ function registro() {
     );
 }
 
-export default registro
+export default Register
