@@ -120,3 +120,24 @@ export async function loginUsuario(email, password) {
   }
 }
 
+
+export async function obtenerUsuarioActual() {
+  const respuesta = await fetch(
+    `${API_URL}/api/usuarios/me`,
+    {
+      method: "GET",
+      credentials: "include"
+    }
+  );
+
+  if (respuesta.status === 401 || respuesta.status === 403) {
+    return null;
+  }
+
+  if (!respuesta.ok) {
+    throw new Error("No se pudo comprobar la sesión.");
+  }
+
+  return respuesta.json();
+}
+

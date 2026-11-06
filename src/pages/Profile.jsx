@@ -1,13 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
-function Profile(){
-    return (
-        <main>
-            <h1>Mi perfil</h1>
-            <p>Todo ok</p>
+function Profile() {
+  const { user } = useOutletContext();
 
-            <Link to="/">Volver a inicio</Link>
-        </main>
-    )
+  return (
+    <main>
+      <h1>Mi perfil</h1>
+
+      <p>Bienvenido, {user.nombreUsuario}.</p>
+      <p>Correo electrónico: {user.email}</p>
+
+      <Link to="/">Volver al inicio</Link>
+    </main>
+  );
 }
-export default Profile
+
+export default Profile;
