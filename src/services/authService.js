@@ -1,4 +1,3 @@
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 async function obtenerCsrf() {
@@ -140,4 +139,25 @@ export async function obtenerUsuarioActual() {
 
   return respuesta.json();
 }
+
+
+export async function logoutUsuario() {
+  const csrf = await obtenerCsrf();
+
+  const respuesta = await fetch(
+    `${API_URL}/api/usuarios/logout`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        [csrf.headerName]: csrf.token
+      }
+    }
+  );
+
+  if (!respuesta.ok) {
+    throw new Error("No se pudo cerrar la sesión.");
+  }
+}
+
 
