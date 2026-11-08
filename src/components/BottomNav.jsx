@@ -1,9 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { House, Heart, CircleHelp, UserRound } from "lucide-react"
-
 import "./BottomNav.css"
+import { useAuth } from "../hooks/useAuth";
 
 function BottomNav() {
+    const { user, loading } = useAuth();
     return (
         <nav className="bottom-nav" aria-label="Navegación principal">
             <NavLink to="/" end className="nav-item">
@@ -20,8 +21,14 @@ function BottomNav() {
                 <CircleHelp aria-hidden="true" />
                 <span>Ayuda</span>
             </NavLink>
-
-            <NavLink to="/login" end className="nav-item">
+            <NavLink
+                to={user ? "/profile" : "/login"}
+                className="nav-item"
+                aria-disabled={loading}
+                onClick={(e) => {
+                    if (loading) e.preventDefault();
+                }}
+            >
                 <UserRound aria-hidden="true" />
                 <span>Cuenta</span>
             </NavLink>

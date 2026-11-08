@@ -61,7 +61,7 @@
     outline-offset: 0.25rem;
 }
 
-@media (max-whidth: 23rem){
+@media (max-width: 23rem){
     .header{
         gap: 0.5rem;
     }

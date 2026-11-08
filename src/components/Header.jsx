@@ -4,21 +4,31 @@ import FeedBack from "./FeedBack";
 import "./Header.css"
 import { useState } from "react";
 import ThemeToggle from "./ThemeToggle";
+import { useAuth } from "../hooks/useAuth";
 
 function Header() {
     const [message, setMesage] = useState("");
+    const { user, loading } = useAuth();
     return (
         <>
             <header className="header">
                 <Link to="/" className="header-logo">
-                <img src="/images/Logo.png" className="header-logo-img"></img>
-                The Power</Link>
+                    <img src="/images/Logo.png" className="header-logo-img"></img>
+                    The Power</Link>
                 <div className="header-actions">
                     <ThemeToggle />
                     <button type="button" className="header-search" aria-label="Buscar música" onClick={() => setMesage("La búsqueda estará disponible próximamnete.")}>
                         <Search aria-hidden="true" />
                     </button>
-                    <Link to="/login" className="header-profile" aria-label="Iniciar sesión">
+                    <Link
+                        to={user ? "/profile" : "/login"}
+                        className="header-profile"
+                        aria-label={user ? "Mi perfil" : "Iniciar sesión"}
+                        aria-disabled={loading}
+                        onClick={(e) => {
+                            if (loading) e.preventDefault();
+                        }}
+                    >
                         <UserRound aria-hidden="true" />
                     </Link>
                 </div>
