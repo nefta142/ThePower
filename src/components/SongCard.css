@@ -63,6 +63,21 @@
     outline-offset: 0.125rem;
 }
 
+.song-card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--color-background);
+  border: 0.0625rem solid var(--color-primary);
+}
+
+.song-card-placeholder svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-primary);
+}
+
 @media (prefers-reduced-motion: reduce) {
 
     .song-card *,

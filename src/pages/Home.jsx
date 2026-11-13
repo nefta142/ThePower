@@ -2,8 +2,9 @@ import Header from "../components/Header"
 import SongCard from "../components/SongCard";
 import "./Home.css"
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FeedBack from "../components/FeedBack";
+import { getSongs } from "../services/songService";
 
 function Home() {
 
@@ -18,6 +19,44 @@ function Home() {
         setMessage("");
         navigate("/", { replace: true, state: null });
     };
+
+    const [songs, setSongs] = useState([]);
+    const [loadingSongs, setLoadingSongs] = useState(true);
+    const [songsError, setSongsError] = useState("");
+
+    useEffect(() => {
+        let active = true;
+
+        const loadSongs = async () => {
+            try {
+                setLoadingSongs(true);
+                setSongsError("");
+
+                const data = await getSongs();
+
+                if (active) {
+                    setSongs(data);
+                }
+            } catch (error) {
+                if (active) {
+                    setSongsError(
+                        error.message || "No se pudieron cargar las canciones."
+                    );
+                }
+            } finally {
+                if (active) {
+                    setLoadingSongs(false);
+                }
+            }
+        };
+
+        loadSongs();
+
+        return () => {
+            active = false;
+        };
+    }, []);
+
 
     return (
         <main className="home">
@@ -34,9 +73,32 @@ function Home() {
 
             <section aria-labelledby="recommended-title">
                 <h2 id="recommended-title">Recomendado para ti</h2>
-                <div className="songs-grid">
-                    <SongCard title="God ends here" artist="Blake" image="" />
-                </div>
+                {loadingSongs && (
+                    <p role="status">Cargando canciones...</p>
+                )}
+
+                {songsError && (
+                    <p className="login-error" role="alert">
+                        {songsError}
+                    </p>
+                )}
+
+                {!loadingSongs && !songsError && songs.length === 0 && (
+                    <p>No hay canciones disponibles todavía.</p>
+                )}
+
+                {!loadingSongs && !songsError && songs.length > 0 && (
+                    <div className="songs-grid">
+                        {songs.map((song) => (
+                            <SongCard
+                                key={song.idCancion}
+                                title={song.titulo}
+                                genre={song.genero}
+                                image={song.imagen}
+                            />
+                        ))}
+                    </div>
+                )}
             </section>
 
             <section aria-labelledby="popular-title">
