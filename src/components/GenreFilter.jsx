@@ -25,7 +25,7 @@ function GenreFilter({
                         key={genre.idGenero}
                         value={genre.idGenero}
                     >
-                        {genre.nombre}
+                        {genre.tipo}
                     </option>
                 ))}
             </select>
