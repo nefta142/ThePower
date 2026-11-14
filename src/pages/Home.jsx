@@ -6,8 +6,10 @@ import Header from "../components/Header";
 import SongCard from "../components/SongCard";
 import FeedBack from "../components/FeedBack";
 import SearchBar from "../components/SearchBar";
+import GenreFilter from "../components/GenreFilter";
 
 import { getSongs } from "../services/songService";
+import { getGenres } from "../services/genreService";
 
 import "./Home.css";
 
@@ -15,15 +17,24 @@ function Home() {
     const location = useLocation();
     const navigate = useNavigate();
 
+    // Mensajes de login, registro y logout
     const [message, setMessage] = useState(
         () => location.state?.message || ""
     );
 
+    // Canciones
     const [songs, setSongs] = useState([]);
     const [loadingSongs, setLoadingSongs] = useState(true);
     const [songsError, setSongsError] = useState("");
 
+    // Géneros
+    const [genres, setGenres] = useState([]);
+    const [loadingGenres, setLoadingGenres] = useState(true);
+    const [genresError, setGenresError] = useState("");
+
+    // Filtros aplicados
     const [searchText, setSearchText] = useState("");
+    const [selectedGenre, setSelectedGenre] = useState("");
 
     const closeMessage = () => {
         setMessage("");
@@ -33,7 +44,42 @@ function Home() {
         });
     };
 
+    // Obtener géneros desde Spring Boot
+    useEffect(() => {
+        let active = true;
 
+        const loadGenres = async () => {
+            try {
+                setLoadingGenres(true);
+                setGenresError("");
+
+                const data = await getGenres();
+
+                if (active) {
+                    setGenres(data);
+                }
+            } catch (error) {
+                if (active) {
+                    setGenresError(
+                        error.message || "No se pudieron cargar los géneros."
+                    );
+                    setGenres([]);
+                }
+            } finally {
+                if (active) {
+                    setLoadingGenres(false);
+                }
+            }
+        };
+
+        loadGenres();
+
+        return () => {
+            active = false;
+        };
+    }, []);
+
+    // Buscar canciones aplicando ambos filtros
     useEffect(() => {
         let active = true;
 
@@ -42,12 +88,14 @@ function Home() {
                 setLoadingSongs(true);
                 setSongsError("");
 
-                const data = await getSongs(searchText);
+                const data = await getSongs(
+                    searchText,
+                    selectedGenre
+                );
 
                 if (active) {
                     setSongs(data);
                 }
-
             } catch (error) {
                 if (active) {
                     setSongsError(
@@ -67,7 +115,20 @@ function Home() {
         return () => {
             active = false;
         };
-    }, [searchText]);
+    }, [searchText, selectedGenre]);
+
+    // Nombre del género seleccionado
+    const activeGenre = genres.find(
+        (genre) => String(genre.idGenero) === selectedGenre
+    );
+
+    const hasActiveFilters = Boolean(searchText || selectedGenre);
+
+    // Limpiar todos los filtros
+    const clearAllFilters = () => {
+        setSearchText("");
+        setSelectedGenre("");
+    };
 
     return (
         <main className="home">
@@ -78,6 +139,7 @@ function Home() {
                 onClose={closeMessage}
             />
 
+            {/* Bienvenida */}
             <section
                 className="home-welcome"
                 aria-labelledby="home-title"
@@ -91,31 +153,95 @@ function Home() {
                 </p>
             </section>
 
+            {/* Buscador */}
             <SearchBar
-                onSearch={(text) => setSearchText(text)}
+                onSearch={setSearchText}
                 onClear={() => setSearchText("")}
             />
 
+            {/* Filtro por género */}
+            <GenreFilter
+                genres={genres}
+                selectedGenre={selectedGenre}
+                onGenreChange={setSelectedGenre}
+                disabled={loadingGenres || Boolean(genresError)}
+            />
+
+            {loadingGenres && (
+                <p className="search-loading" role="status">
+                    Cargando géneros...
+                </p>
+            )}
+
+            {genresError && (
+                <p className="search-filter-error" role="alert">
+                    {genresError}
+                </p>
+            )}
+
+            {/* Filtros activos */}
+            {hasActiveFilters && (
+                <section
+                    className="active-filters"
+                    aria-label="Filtros activos"
+                >
+                    <h2>Filtros aplicados</h2>
+
+                    <div className="active-filters-list">
+                        {searchText && (
+                            <button
+                                type="button"
+                                className="active-filter"
+                                onClick={() => setSearchText("")}
+                                aria-label={`Eliminar búsqueda ${searchText}`}
+                            >
+                                Texto: {searchText} ×
+                            </button>
+                        )}
+
+                        {selectedGenre && (
+                            <button
+                                type="button"
+                                className="active-filter"
+                                onClick={() => setSelectedGenre("")}
+                                aria-label="Eliminar filtro de género"
+                            >
+                                Género: {activeGenre?.tipo || selectedGenre} ×
+                            </button>
+                        )}
+
+                        <button
+                            type="button"
+                            className="clear-all-filters"
+                            onClick={clearAllFilters}
+                        >
+                            Limpiar todos
+                        </button>
+                    </div>
+                </section>
+            )}
+
+            {/* Listado y resultados */}
             <section
                 className="home-section"
                 aria-labelledby="recommended-title"
             >
                 <h2 id="recommended-title">
-                    {searchText
+                    {hasActiveFilters
                         ? "Resultados de búsqueda"
                         : "Canciones disponibles"}
                 </h2>
 
                 {loadingSongs && (
                     <p className="search-loading" role="status">
-                        {searchText
-                            ? "Buscando canciones..."
+                        {hasActiveFilters
+                            ? "Aplicando filtros..."
                             : "Cargando canciones..."}
                     </p>
                 )}
 
                 {songsError && (
-                    <p className="login-error" role="alert">
+                    <p className="search-filter-error" role="alert">
                         {songsError}
                     </p>
                 )}
@@ -134,8 +260,8 @@ function Home() {
 
                         {songs.length === 0 ? (
                             <p className="search-empty">
-                                {searchText
-                                    ? `No se encontraron canciones para "${searchText}".`
+                                {hasActiveFilters
+                                    ? "No se encontraron canciones con los filtros seleccionados."
                                     : "Todavía no hay canciones disponibles."}
                             </p>
                         ) : (
@@ -154,6 +280,7 @@ function Home() {
                 )}
             </section>
 
+            {/* Sección futura */}
             <section
                 className="home-section"
                 aria-labelledby="popular-title"
