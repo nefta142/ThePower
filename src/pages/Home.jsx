@@ -1,13 +1,17 @@
-import Header from "../components/Header"
-import SongCard from "../components/SongCard";
-import "./Home.css"
-import { useLocation, useNavigate } from "react-router-dom";
+
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import Header from "../components/Header";
+import SongCard from "../components/SongCard";
 import FeedBack from "../components/FeedBack";
+import SearchBar from "../components/SearchBar";
+
 import { getSongs } from "../services/songService";
 
-function Home() {
+import "./Home.css";
 
+function Home() {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -15,14 +19,20 @@ function Home() {
         () => location.state?.message || ""
     );
 
-    const closeMessage = () => {
-        setMessage("");
-        navigate("/", { replace: true, state: null });
-    };
-
     const [songs, setSongs] = useState([]);
     const [loadingSongs, setLoadingSongs] = useState(true);
     const [songsError, setSongsError] = useState("");
+
+    const [searchText, setSearchText] = useState("");
+
+    const closeMessage = () => {
+        setMessage("");
+        navigate("/", {
+            replace: true,
+            state: null
+        });
+    };
+
 
     useEffect(() => {
         let active = true;
@@ -32,16 +42,18 @@ function Home() {
                 setLoadingSongs(true);
                 setSongsError("");
 
-                const data = await getSongs();
+                const data = await getSongs(searchText);
 
                 if (active) {
                     setSongs(data);
                 }
+
             } catch (error) {
                 if (active) {
                     setSongsError(
                         error.message || "No se pudieron cargar las canciones."
                     );
+                    setSongs([]);
                 }
             } finally {
                 if (active) {
@@ -55,8 +67,7 @@ function Home() {
         return () => {
             active = false;
         };
-    }, []);
-
+    }, [searchText]);
 
     return (
         <main className="home">
@@ -64,17 +75,43 @@ function Home() {
 
             <FeedBack
                 message={message}
-                onClose={closeMessage} />
+                onClose={closeMessage}
+            />
 
-            <section aria-labelledby="home-title">
-                <h1 id="home-title">Descubre tu música</h1>
-                <p>Escucha tus canciones favoritas en The Power.</p>
+            <section
+                className="home-welcome"
+                aria-labelledby="home-title"
+            >
+                <h1 id="home-title">
+                    Descubre tu música
+                </h1>
+
+                <p>
+                    Escucha tus canciones favoritas en The Power.
+                </p>
             </section>
 
-            <section aria-labelledby="recommended-title">
-                <h2 id="recommended-title">Recomendado para ti</h2>
+            <SearchBar
+                onSearch={(text) => setSearchText(text)}
+                onClear={() => setSearchText("")}
+            />
+
+            <section
+                className="home-section"
+                aria-labelledby="recommended-title"
+            >
+                <h2 id="recommended-title">
+                    {searchText
+                        ? "Resultados de búsqueda"
+                        : "Canciones disponibles"}
+                </h2>
+
                 {loadingSongs && (
-                    <p role="status">Cargando canciones...</p>
+                    <p className="search-loading" role="status">
+                        {searchText
+                            ? "Buscando canciones..."
+                            : "Cargando canciones..."}
+                    </p>
                 )}
 
                 {songsError && (
@@ -83,29 +120,50 @@ function Home() {
                     </p>
                 )}
 
-                {!loadingSongs && !songsError && songs.length === 0 && (
-                    <p>No hay canciones disponibles todavía.</p>
-                )}
+                {!loadingSongs && !songsError && (
+                    <>
+                        <p
+                            className="search-results-count"
+                            role="status"
+                        >
+                            {songs.length}{" "}
+                            {songs.length === 1
+                                ? "canción encontrada"
+                                : "canciones encontradas"}
+                        </p>
 
-                {!loadingSongs && !songsError && songs.length > 0 && (
-                    <div className="songs-grid">
-                        {songs.map((song) => (
-                            <SongCard
-                                key={song.idCancion}
-                                title={song.titulo}
-                                genre={song.genero}
-                                image={song.imagen}
-                            />
-                        ))}
-                    </div>
+                        {songs.length === 0 ? (
+                            <p className="search-empty">
+                                {searchText
+                                    ? `No se encontraron canciones para "${searchText}".`
+                                    : "Todavía no hay canciones disponibles."}
+                            </p>
+                        ) : (
+                            <div className="songs-grid">
+                                {songs.map((song) => (
+                                    <SongCard
+                                        key={song.idCancion}
+                                        title={song.titulo}
+                                        genre={song.genero}
+                                        image={song.imagen}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </>
                 )}
             </section>
 
-            <section aria-labelledby="popular-title">
-                <h2 id="popular-title">Lo más escuchado</h2>
+            <section
+                className="home-section"
+                aria-labelledby="popular-title"
+            >
+                <h2 id="popular-title">
+                    Lo más escuchado
+                </h2>
             </section>
         </main>
     );
 }
 
-export default Home
+export default Home;
