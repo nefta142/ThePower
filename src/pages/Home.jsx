@@ -32,6 +32,7 @@ function Home() {
 
     const [searchText, setSearchText] = useState("");
     const [selectedGenre, setSelectedGenre] = useState("");
+    const [filterMessage, setFilterMessage] = useState("");
 
     const closeMessage = () => {
         setMessage("");
@@ -119,9 +120,38 @@ function Home() {
 
     const hasActiveFilters = Boolean(searchText || selectedGenre);
 
+
+    const handleSearch = (text) => {
+        setSearchText(text);
+        setFilterMessage(`Búsqueda aplicada: "${text}".`);
+    };
+
+    const handleClearSearch = () => {
+        setSearchText("");
+        setFilterMessage("Filtro de búsqueda eliminado.");
+    };
+
+    const handleGenreChange = (genreId) => {
+        setSelectedGenre(genreId);
+
+        if (!genreId) {
+            setFilterMessage("Filtro de género eliminado.");
+            return;
+        }
+
+        const genre = genres.find(
+            (item) => String(item.idGenero) === String(genreId)
+        );
+
+        setFilterMessage(
+            `Filtro de género aplicado: ${genre?.tipo || "Seleccionado"}.`
+        );
+    };
+
     const clearAllFilters = () => {
         setSearchText("");
         setSelectedGenre("");
+        setFilterMessage("Todos los filtros se han eliminado.");
     };
 
     return (
@@ -146,16 +176,17 @@ function Home() {
                 </p>
             </section>
 
+
             <SearchBar
                 searchText={searchText}
-                onSearch={setSearchText}
-                onClear={() => setSearchText("")}
+                onSearch={handleSearch}
+                onClear={handleClearSearch}
             />
 
             <GenreFilter
                 genres={genres}
                 selectedGenre={selectedGenre}
-                onGenreChange={setSelectedGenre}
+                onGenreChange={handleGenreChange}
                 disabled={loadingGenres || Boolean(genresError)}
             />
 
@@ -183,7 +214,7 @@ function Home() {
                             <button
                                 type="button"
                                 className="active-filter"
-                                onClick={() => setSearchText("")}
+                                onClick={handleClearSearch}
                                 aria-label={`Eliminar búsqueda ${searchText}`}
                             >
                                 Texto: {searchText} ×
@@ -194,8 +225,7 @@ function Home() {
                             <button
                                 type="button"
                                 className="active-filter"
-                                onClick={() => setSelectedGenre("")}
-                                aria-label="Eliminar filtro de género"
+                                onClick={() => handleGenreChange("")} aria-label="Eliminar filtro de género"
                             >
                                 Género: {activeGenre?.tipo || selectedGenre} ×
                             </button>
@@ -204,13 +234,21 @@ function Home() {
                         <button
                             type="button"
                             className="clear-all-filters"
-                            onClick={clearAllFilters}
-                        >
+                            onClick={clearAllFilters}                        >
                             Limpiar todos
                         </button>
                     </div>
                 </section>
             )}
+
+            <div
+                className="filter-feedback"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+            >
+                {filterMessage}
+            </div>
 
             <section
                 className="home-section"
