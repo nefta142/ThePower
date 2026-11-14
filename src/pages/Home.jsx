@@ -25,10 +25,12 @@ function Home() {
     const [songs, setSongs] = useState([]);
     const [loadingSongs, setLoadingSongs] = useState(true);
     const [songsError, setSongsError] = useState("");
+    const [songsRetry, setSongsRetry] = useState(0);
 
     const [genres, setGenres] = useState([]);
     const [loadingGenres, setLoadingGenres] = useState(true);
     const [genresError, setGenresError] = useState("");
+    const [genresRetry, setGenresRetry] = useState(0);
 
     const [searchText, setSearchText] = useState("");
     const [selectedGenre, setSelectedGenre] = useState("");
@@ -75,7 +77,7 @@ function Home() {
         return () => {
             active = false;
         };
-    }, []);
+    }, [genresRetry]);
 
     useEffect(() => {
         let active = true;
@@ -112,7 +114,7 @@ function Home() {
         return () => {
             active = false;
         };
-    }, [searchText, selectedGenre]);
+    }, [searchText, selectedGenre, songsRetry]);
 
     const activeGenre = genres.find(
         (genre) => String(genre.idGenero) === selectedGenre
@@ -196,11 +198,27 @@ function Home() {
                 </p>
             )}
 
+
             {genresError && (
-                <p className="search-filter-error" role="alert">
-                    {genresError}
-                </p>
+                <div
+                    className="search-error-container"
+                    role="alert"
+                >
+                    <p className="search-filter-error">
+                        {genresError}
+                    </p>
+
+                    <button
+                        type="button"
+                        className="search-retry-button"
+                        onClick={() => setGenresRetry((previous) => previous + 1)}
+                        disabled={loadingGenres}
+                    >
+                        Reintentar géneros
+                    </button>
+                </div>
             )}
+
 
             {hasActiveFilters && (
                 <section
@@ -225,7 +243,8 @@ function Home() {
                             <button
                                 type="button"
                                 className="active-filter"
-                                onClick={() => handleGenreChange("")} aria-label="Eliminar filtro de género"
+                                onClick={() => handleGenreChange("")}
+                                aria-label="Eliminar filtro de género"
                             >
                                 Género: {activeGenre?.tipo || selectedGenre} ×
                             </button>
@@ -269,9 +288,20 @@ function Home() {
                 )}
 
                 {songsError && (
-                    <p className="search-filter-error" role="alert">
-                        {songsError}
-                    </p>
+                    <div className="search-error-container" role="alert">
+                        <p className="search-filter-error">
+                            {songsError}
+                        </p>
+
+                        <button
+                            type="button"
+                            className="search-retry-button"
+                            onClick={() => setSongsRetry((previous) => previous + 1)}
+                            disabled={loadingSongs}
+                        >
+                            Reintentar
+                        </button>
+                    </div>
                 )}
 
                 {!loadingSongs && !songsError && (
