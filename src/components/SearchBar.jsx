@@ -3,36 +3,15 @@ import { Search, X } from "lucide-react";
 
 import "./SearchBar.css";
 
-function SearchBar({ onSearch, onClear }) {
-    const [searchText, setSearchText] = useState("");
+function SearchBar({ searchText, onSearch, onClear }) {
+    const [inputText, setInputText] = useState(searchText);
     const [error, setError] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const text = searchText.trim();
-
-        if (!text) {
-            setError("Introduce el nombre de una canción.");
-            return;
-        }
-
-        if (text.length > 100) {
-            setError("La búsqueda no puede superar 100 caracteres.");
-            return;
-        }
-
-        setError("");
-        onSearch(text);
-    };
-
-    const handleClear = () => {
-        setSearchText("");
-        setError("");
-        onClear();
-    };
-
     const searchInputRef = useRef(null);
+
+    useEffect(() => {
+        setInputText(searchText);
+    }, [searchText]);
 
     useEffect(() => {
         const handleFocusSearch = () => {
@@ -46,12 +25,44 @@ function SearchBar({ onSearch, onClear }) {
             });
         };
 
-        window.addEventListener("focus-song-search", handleFocusSearch);
+        window.addEventListener(
+            "focus-song-search",
+            handleFocusSearch
+        );
 
         return () => {
-            window.removeEventListener("focus-song-search", handleFocusSearch);
+            window.removeEventListener(
+                "focus-song-search",
+                handleFocusSearch
+            );
         };
     }, []);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const text = inputText.trim();
+
+        if (!text) {
+            setError("Introduce el nombre de una canción.");
+            return;
+        }
+
+        if (text.length > 100) {
+            setError("La búsqueda no puede superar 100 caracteres.");
+            return;
+        }
+
+        setError("");
+        setInputText(text);
+        onSearch(text);
+    };
+
+    const handleClear = () => {
+        setInputText("");
+        setError("");
+        onClear();
+    };
 
     return (
         <form
@@ -66,21 +77,23 @@ function SearchBar({ onSearch, onClear }) {
 
             <div className="search-controls">
                 <input
+                    ref={searchInputRef}
                     id="song-search"
                     type="search"
                     placeholder="Título de la canción..."
-                    value={searchText}
+                    value={inputText}
                     maxLength={100}
                     onChange={(e) => {
-                        setSearchText(e.target.value);
+                        setInputText(e.target.value);
                         setError("");
                     }}
                     aria-invalid={Boolean(error)}
-                    aria-describedby={error ? "search-error" : undefined}
-                    ref={searchInputRef}
+                    aria-describedby={
+                        error ? "search-error" : undefined
+                    }
                 />
 
-                {searchText && (
+                {inputText && (
                     <button
                         type="button"
                         className="search-clear"

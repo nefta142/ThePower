@@ -17,22 +17,19 @@ function Home() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Mensajes de login, registro y logout
     const [message, setMessage] = useState(
         () => location.state?.message || ""
     );
 
-    // Canciones
+
     const [songs, setSongs] = useState([]);
     const [loadingSongs, setLoadingSongs] = useState(true);
     const [songsError, setSongsError] = useState("");
 
-    // Géneros
     const [genres, setGenres] = useState([]);
     const [loadingGenres, setLoadingGenres] = useState(true);
     const [genresError, setGenresError] = useState("");
 
-    // Filtros aplicados
     const [searchText, setSearchText] = useState("");
     const [selectedGenre, setSelectedGenre] = useState("");
 
@@ -44,7 +41,7 @@ function Home() {
         });
     };
 
-    // Obtener géneros desde Spring Boot
+
     useEffect(() => {
         let active = true;
 
@@ -79,7 +76,6 @@ function Home() {
         };
     }, []);
 
-    // Buscar canciones aplicando ambos filtros
     useEffect(() => {
         let active = true;
 
@@ -117,14 +113,12 @@ function Home() {
         };
     }, [searchText, selectedGenre]);
 
-    // Nombre del género seleccionado
     const activeGenre = genres.find(
         (genre) => String(genre.idGenero) === selectedGenre
     );
 
     const hasActiveFilters = Boolean(searchText || selectedGenre);
 
-    // Limpiar todos los filtros
     const clearAllFilters = () => {
         setSearchText("");
         setSelectedGenre("");
@@ -139,7 +133,6 @@ function Home() {
                 onClose={closeMessage}
             />
 
-            {/* Bienvenida */}
             <section
                 className="home-welcome"
                 aria-labelledby="home-title"
@@ -153,13 +146,12 @@ function Home() {
                 </p>
             </section>
 
-            {/* Buscador */}
             <SearchBar
+                searchText={searchText}
                 onSearch={setSearchText}
                 onClear={() => setSearchText("")}
             />
 
-            {/* Filtro por género */}
             <GenreFilter
                 genres={genres}
                 selectedGenre={selectedGenre}
@@ -179,7 +171,6 @@ function Home() {
                 </p>
             )}
 
-            {/* Filtros activos */}
             {hasActiveFilters && (
                 <section
                     className="active-filters"
@@ -221,7 +212,6 @@ function Home() {
                 </section>
             )}
 
-            {/* Listado y resultados */}
             <section
                 className="home-section"
                 aria-labelledby="recommended-title"
@@ -280,7 +270,6 @@ function Home() {
                 )}
             </section>
 
-            {/* Sección futura */}
             <section
                 className="home-section"
                 aria-labelledby="popular-title"
