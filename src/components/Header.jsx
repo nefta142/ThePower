@@ -17,7 +17,12 @@ function Header() {
                     The Power</Link>
                 <div className="header-actions">
                     <ThemeToggle />
-                    <button type="button" className="header-search" aria-label="Buscar música" onClick={() => setMesage("La búsqueda estará disponible próximamnete.")}>
+                    <button type="button"
+                        className="header-search"
+                        aria-label="Buscar música"
+                        onClick={() => {
+                            window.dispatchEvent(new Event("focus-song-search"));
+                        }}>
                         <Search aria-hidden="true" />
                     </button>
                     <Link

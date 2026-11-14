@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Search, X } from "lucide-react";
 
 import "./SearchBar.css";
@@ -32,6 +32,27 @@ function SearchBar({ onSearch, onClear }) {
         onClear();
     };
 
+    const searchInputRef = useRef(null);
+
+    useEffect(() => {
+        const handleFocusSearch = () => {
+            searchInputRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            searchInputRef.current?.focus({
+                preventScroll: true
+            });
+        };
+
+        window.addEventListener("focus-song-search", handleFocusSearch);
+
+        return () => {
+            window.removeEventListener("focus-song-search", handleFocusSearch);
+        };
+    }, []);
+
     return (
         <form
             className="search-form"
@@ -56,6 +77,7 @@ function SearchBar({ onSearch, onClear }) {
                     }}
                     aria-invalid={Boolean(error)}
                     aria-describedby={error ? "search-error" : undefined}
+                    ref={searchInputRef}
                 />
 
                 {searchText && (
