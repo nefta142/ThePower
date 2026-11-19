@@ -4,7 +4,16 @@ import "./BottomNav.css"
 import { useAuth } from "../hooks/useAuth";
 
 function BottomNav() {
+
     const { user, loading } = useAuth();
+
+    const accountPath = user ? "/profile" : "/login"
+
+    const handleAccountClick = (event)=>{
+        if(loading){
+            event.preventDefault();
+        }
+    }
     return (
         <nav className="bottom-nav" aria-label="Navegación principal">
             <NavLink to="/" end className="nav-item">
@@ -22,12 +31,10 @@ function BottomNav() {
                 <span>Ayuda</span>
             </NavLink>
             <NavLink
-                to={user ? "/profile" : "/login"}
+                to={accountPath}
                 className="nav-item"
                 aria-disabled={loading}
-                onClick={(e) => {
-                    if (loading) e.preventDefault();
-                }}
+                onClick={handleAccountClick}
             >
                 <UserRound aria-hidden="true" />
                 <span>Cuenta</span>

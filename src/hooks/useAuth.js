@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { obtenerUsuarioActual } from "../services/authService";
 
 export function useAuth() {
+    const location = useLocation();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -10,6 +12,7 @@ export function useAuth() {
 
         const checkSession = async () => {
             try {
+                setLoading(true);
                 const currentUser = await obtenerUsuarioActual();
 
                 if (active) {
@@ -26,10 +29,15 @@ export function useAuth() {
 
         checkSession();
 
+        const handleFocus = () =>{
+            checkSession();
+        }
+        window.addEventListener("focus", handleFocus);
         return () => {
             active = false;
+             window.removeEventListener("focus", handleFocus);
         };
-    }, []);
+    }, [location.pathname]);
 
     return { user, loading };
 }
