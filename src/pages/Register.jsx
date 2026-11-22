@@ -110,7 +110,7 @@ function Register() {
             <div className="login-container">
                 <div className="login-header">
                     <img
-                        src="/images/Logo.png"
+                        src="/images/Logo.webp"
                         alt=""
                         className="login-logo"
                     />

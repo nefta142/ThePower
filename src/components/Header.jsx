@@ -13,7 +13,7 @@ function Header() {
         <>
             <header className="header">
                 <Link to="/" className="header-logo">
-                    <img src="/images/Logo.png" className="header-logo-img"></img>
+                    <img src="/images/Logo.webp" className="header-logo-img"></img>
                     The Power</Link>
                 <div className="header-actions">
                     <ThemeToggle />

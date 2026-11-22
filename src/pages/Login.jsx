@@ -54,7 +54,7 @@ function Login() {
         <main className="login">
             <div className="login-container">
                 <div className="login-header">
-                    <img src="/images/Logo.png" alt="" className="login-logo" />
+                    <img src="/images/Logo.webp" alt="" className="login-logo" />
                     <h1>The Power</h1>
                     <p>Inicia sesón para poder disfrutar de tu música</p>
                 </div>
