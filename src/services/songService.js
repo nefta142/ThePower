@@ -47,7 +47,7 @@ export async function getSongs(searchText = "", genreID = null) {
         throw error;
     }
 
-} 
+}
 
 export async function uploadSong(songData) {
     try {
@@ -109,6 +109,52 @@ export async function uploadSong(songData) {
         }
 
         return await response.json();
+
+    } catch (error) {
+        if (error instanceof TypeError) {
+            throw new Error(
+                "No se puede conectar con el servidor Java.",
+                { cause: error }
+            );
+        }
+
+        throw error;
+    }
+}
+
+export async function getArtistSongs(artistId) {
+    if (!Number.isInteger(Number(artistId)) || Number(artistId) <= 0) {
+        throw new Error("El identificador del artista no es válido.");
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/artistas/${artistId}/canciones`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        if (response.status === 404) {
+            return [];
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                `No se pudieron obtener las canciones (${response.status}).`
+            );
+        }
+
+        const songs = await response.json();
+
+        if (!Array.isArray(songs)) {
+            throw new Error(
+                "La respuesta del servidor no es válida."
+            );
+        }
+
+        return songs;
 
     } catch (error) {
         if (error instanceof TypeError) {

@@ -5,6 +5,8 @@ import { UserRound, Pencil, Save, X, LogOut } from "lucide-react";
 import { logoutUsuario } from "../services/authService";
 import { updateProfile } from "../services/profileService";
 
+import SongUploadForm from "../components/SongUploadForm";
+
 import "./Profile.css";
 
 function Profile() {
@@ -278,7 +280,7 @@ function Profile() {
                     )}
                 </form>
             </section>
-
+                    <SongUploadForm />
             <section
                 className="profile-section"
                 aria-labelledby="profile-account-title"

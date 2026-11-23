@@ -3,14 +3,31 @@ import { useState } from "react";
 
 import "./SongCard.css";
 
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+function getImageUrl(image) {
+  if (!image) {
+    return "";
+  }
+
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+
+  return `${API_URL}/${image.replace(/^\/+/, "")}`;
+}
+
+
 function SongCard({ title, genre, image }) {
   const [imageError, setImageError] = useState(false);
+  const imageUrl = getImageUrl(image);
 
   return (
     <article className="song-card">
       {image && !imageError ? (
         <img
-          src={image}
+          src={imageUrl}
           alt={`Portada de ${title}`}
           className="song-card-image"
           onError={() => setImageError(true)}

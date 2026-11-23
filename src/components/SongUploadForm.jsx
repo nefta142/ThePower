@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Upload, Music2, ImagePlus } from "lucide-react";
 
 import { getGenres } from "../services/genreService";
@@ -18,6 +18,8 @@ function SongUploadForm() {
 
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+
+    const formRef = useRef(null);
 
     useEffect(() => {
         let active = true;
@@ -105,8 +107,7 @@ function SongUploadForm() {
             setAudio(null);
             setImage(null);
 
-            // Limpiar los campos de archivos
-            event.currentTarget.reset();
+           formRef.current?.reset();
 
             setSuccess("La canción se ha subido correctamente.");
 
@@ -145,6 +146,7 @@ function SongUploadForm() {
             )}
 
             <form
+            ref={formRef}
                 className="song-upload-form"
                 onSubmit={handleSubmit}
             >
