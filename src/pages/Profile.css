@@ -1,0 +1,230 @@
+.profile {
+    width: 100%;
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 6rem;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 4rem;
+    height: 4rem;
+
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+    border-radius: 50%;
+}
+
+.profile-avatar svg {
+    width: 2rem;
+    height: 2rem;
+}
+
+.profile-heading {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-heading h1 {
+    margin: 0 0 0.25rem;
+    color: var(--color-text-primary);
+    font-size: 1.5rem;
+}
+
+.profile-heading p {
+    margin: 0.125rem 0;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
+}
+
+.profile-section {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+
+    background-color: var(--color-surface);
+    border-radius: 1rem;
+}
+
+.profile-section h2 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: 1.125rem;
+}
+
+.profile-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.profile-edit-button,
+.profile-save-button,
+.profile-cancel-button,
+.profile-logout-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    min-height: 2.75rem;
+    padding: 0.625rem 0.875rem;
+
+    border: none;
+    border-radius: 0.75rem;
+
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.profile-edit-button,
+.profile-save-button {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+}
+
+.profile-cancel-button {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+}
+
+.profile-logout-button {
+    margin-top: 1.25rem;
+    background-color: var(--color-error-background);
+    color: var(--color-error-text);
+}
+
+.profile-edit-button svg,
+.profile-save-button svg,
+.profile-cancel-button svg,
+.profile-logout-button svg {
+    width: 1.125rem;
+    height: 1.125rem;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.profile-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.profile-form-group label {
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.profile-form-group input {
+    width: 100%;
+    min-width: 0;
+    min-height: 2.875rem;
+    padding: 0.75rem;
+
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+
+    border: 0.0625rem solid var(--color-text-secondary);
+    border-radius: 0.625rem;
+
+    font-size: 0.875rem;
+}
+
+.profile-form-group input:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.profile-form-group input:focus-visible {
+    outline: 0.125rem solid var(--color-accent);
+    outline-offset: 0.125rem;
+}
+
+.profile-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.profile-error,
+.profile-success {
+    margin-bottom: 1rem;
+    padding: 0.875rem;
+
+    border-radius: 0.625rem;
+    font-size: 0.875rem;
+}
+
+.profile-error {
+    background-color: var(--color-error-background);
+    color: var(--color-error-text);
+}
+
+.profile-success {
+    background-color: var(--color-success-background);
+    color: var(--color-success-text);
+}
+
+.profile-back-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.profile-back-link:hover {
+    text-decoration: underline;
+}
+
+.profile button:focus-visible,
+.profile-back-link:focus-visible {
+    outline: 0.125rem solid var(--color-accent);
+    outline-offset: 0.125rem;
+}
+
+.profile button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 25rem) {
+    .profile {
+        padding-right: 0.75rem;
+        padding-left: 0.75rem;
+    }
+
+    .profile-section {
+        padding: 1rem;
+    }
+
+    .profile-form-actions {
+        flex-direction: column;
+    }
+
+    .profile-form-actions button {
+        width: 100%;
+    }
+}
