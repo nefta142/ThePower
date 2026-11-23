@@ -6,6 +6,7 @@ import { logoutUsuario } from "../services/authService";
 import { updateProfile } from "../services/profileService";
 
 import SongUploadForm from "../components/SongUploadForm";
+import MySongs from "../components/MySongs";
 
 import "./Profile.css";
 
@@ -27,6 +28,7 @@ function Profile() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [songsRefresh, setSongsRefresh] = useState(0);
 
     const resetForm = (userData) => {
         setFormData({
@@ -280,7 +282,17 @@ function Profile() {
                     )}
                 </form>
             </section>
-                    <SongUploadForm />
+            
+            <SongUploadForm
+                onUploadSuccess={() => {
+                    setSongsRefresh((previous) => previous + 1);
+                }}
+            />
+
+            <MySongs
+                userId={currentUser.idUsuario}
+                refreshKey={songsRefresh}
+            />
             <section
                 className="profile-section"
                 aria-labelledby="profile-account-title"

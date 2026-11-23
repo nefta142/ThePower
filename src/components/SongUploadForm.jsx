@@ -6,7 +6,7 @@ import { uploadSong } from "../services/songService";
 
 import "./SongUploadForm.css";
 
-function SongUploadForm() {
+function SongUploadForm({onUploadSuccess}) {
     const [title, setTitle] = useState("");
     const [genreId, setGenreId] = useState("");
     const [audio, setAudio] = useState(null);
@@ -101,6 +101,8 @@ function SongUploadForm() {
                 audio,
                 image
             });
+            
+            onUploadSuccess?.();
 
             setTitle("");
             setGenreId("");
