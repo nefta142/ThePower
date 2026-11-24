@@ -61,3 +61,59 @@ export async function updateProfile(profileData) {
     }
 
 }
+
+
+export async function changePassword(passwordData) {
+    try {
+        const csrf = await getCsrf();
+
+        const response = await fetch(
+            `${API_URL}/api/usuarios/me/contrasena`,
+            {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    [csrf.headerName]: csrf.token
+                },
+                body: JSON.stringify({
+                    contrasenaActual: passwordData.currentPassword,
+                    contrasenaNueva: passwordData.newPassword
+                })
+            }
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+
+            let errorMessage = "No se pudo cambiar la contraseña.";
+
+            if (response.status === 401) {
+                errorMessage = "Debes iniciar sesión nuevamente.";
+            } else if (typeof errorData?.message === "string") {
+                errorMessage = errorData.message;
+            } else if (typeof errorData?.mensaje === "string") {
+                errorMessage = errorData.mensaje;
+            } else if (typeof errorData?.detail === "string") {
+                errorMessage = errorData.detail;
+            } else if (response.status === 403) {
+                errorMessage =
+                    "No se pudo autorizar el cambio de contraseña.";
+            }
+
+            throw new Error(errorMessage);
+        }
+
+        return await response.json();
+
+    } catch (error) {
+        if (error instanceof TypeError) {
+            throw new Error(
+                "No se puede conectar con el servidor Java.",
+                { cause: error }
+            );
+        }
+
+        throw error;
+    }
+}
