@@ -167,3 +167,146 @@ export async function getArtistSongs(artistId) {
         throw error;
     }
 }
+
+export async function updateSong(songId, songData) {
+    try {
+        const csrfResponse = await fetch(
+            `${API_URL}/api/usuarios/csrf`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        if (!csrfResponse.ok) {
+            throw new Error(
+                "No se pudo obtener el token de seguridad."
+            );
+        }
+
+        const csrf = await csrfResponse.json();
+
+        const formData = new FormData();
+
+        formData.append("titulo", songData.title.trim());
+        formData.append("idGenero", String(songData.genreId));
+
+        if (songData.audio) {
+            formData.append("audio", songData.audio);
+        }
+
+        if (songData.image) {
+            formData.append("imagen", songData.image);
+        }
+
+        const response = await fetch(
+            `${API_URL}/api/canciones/${songId}`,
+            {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    [csrf.headerName]: csrf.token
+                },
+                body: formData
+            }
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+
+            let errorMessage = "No se pudo modificar la canción.";
+
+            if (typeof errorData?.message === "string") {
+                errorMessage = errorData.message;
+            } else if (typeof errorData?.mensaje === "string") {
+                errorMessage = errorData.mensaje;
+            } else if (response.status === 403) {
+                errorMessage =
+                    "No tienes permisos para modificar esta canción.";
+            } else if (response.status === 404) {
+                errorMessage = "La canción no existe.";
+            }
+
+            throw new Error(errorMessage);
+        }
+
+        return await response.json();
+
+    } catch (error) {
+        if (error instanceof TypeError) {
+            throw new Error(
+                "No se puede conectar con el servidor Java.",
+                { cause: error }
+            );
+        }
+
+        throw error;
+    }
+}
+
+
+export async function deleteSong(songId) {
+    try {
+        const csrfResponse = await fetch(
+            `${API_URL}/api/usuarios/csrf`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        if (!csrfResponse.ok) {
+            throw new Error(
+                "No se pudo obtener el token de seguridad."
+            );
+        }
+
+        const csrf = await csrfResponse.json();
+
+        const response = await fetch(
+            `${API_URL}/api/canciones/${songId}`,
+            {
+                method: "DELETE",
+                credentials: "include",
+                headers: {
+                    [csrf.headerName]: csrf.token
+                }
+            }
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+
+            let errorMessage = "No se pudo eliminar la canción.";
+
+            if (response.status === 409) {
+                errorMessage =
+                    "No puedes eliminar esta canción porque tiene otros colaboradores.";
+            } else if (response.status === 403) {
+                errorMessage =
+                    "No tienes permisos para eliminar esta canción.";
+            } else if (response.status === 404) {
+                errorMessage = "La canción no existe.";
+            } else if (typeof errorData?.message === "string") {
+                errorMessage = errorData.message;
+            } else if (typeof errorData?.mensaje === "string") {
+                errorMessage = errorData.mensaje;
+            }
+
+            throw new Error(errorMessage);
+        }
+
+        return true;
+
+    } catch (error) {
+        if (error instanceof TypeError) {
+            throw new Error(
+                "No se puede conectar con el servidor Java.",
+                { cause: error }
+            );
+        }
+
+        throw error;
+    }
+}
+
