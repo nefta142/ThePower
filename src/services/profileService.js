@@ -117,3 +117,60 @@ export async function changePassword(passwordData) {
         throw error;
     }
 }
+
+export async function deleteAccount(password) {
+    try {
+        const csrf = await getCsrf();
+
+        const response = await fetch(
+            `${API_URL}/api/usuarios/me`,
+            {
+                method: "DELETE",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    [csrf.headerName]: csrf.token
+                },
+                body: JSON.stringify({
+                    contrasena: password
+                })
+            }
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+
+            let errorMessage = "No se pudo eliminar la cuenta.";
+
+            if (response.status === 401) {
+                errorMessage = "Debes iniciar sesión nuevamente.";
+            } else if (response.status === 409) {
+                errorMessage =
+                    "No se puede eliminar la cuenta porque tiene contenido asociado.";
+            } else if (typeof errorData?.message === "string") {
+                errorMessage = errorData.message;
+            } else if (typeof errorData?.mensaje === "string") {
+                errorMessage = errorData.mensaje;
+            } else if (typeof errorData?.detail === "string") {
+                errorMessage = errorData.detail;
+            } else if (response.status === 403) {
+                errorMessage =
+                    "No se pudo autorizar la eliminación de la cuenta.";
+            }
+
+            throw new Error(errorMessage);
+        }
+
+        return true;
+
+    } catch (error) {
+        if (error instanceof TypeError) {
+            throw new Error(
+                "No se puede conectar con el servidor Java.",
+                { cause: error }
+            );
+        }
+
+        throw error;
+    }
+}

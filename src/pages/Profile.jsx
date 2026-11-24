@@ -8,6 +8,7 @@ import { updateProfile } from "../services/profileService";
 import SongUploadForm from "../components/SongUploadForm";
 import MySongs from "../components/MySongs";
 import ChangePasswordForm from "../components/ChangePasswordForm";
+import DeleteAcountForm from "../components/DeleteAccountForm"
 
 import "./Profile.css";
 
@@ -283,7 +284,7 @@ function Profile() {
                     )}
                 </form>
             </section>
-            
+
             <SongUploadForm
                 onUploadSuccess={() => {
                     setSongsRefresh((previous) => previous + 1);
@@ -298,10 +299,13 @@ function Profile() {
                 className="profile-section"
                 aria-labelledby="profile-account-title"
             >
-                <ChangePasswordForm/>
+
                 <h2 id="profile-account-title">
                     Mi cuenta
                 </h2>
+
+                <ChangePasswordForm />
+                <DeleteAcountForm/>
 
                 <button
                     type="button"

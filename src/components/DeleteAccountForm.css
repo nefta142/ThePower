@@ -1,0 +1,226 @@
+.delete-account-section {
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+
+    background-color: var(--color-surface);
+    border: 0.0625rem solid var(--color-error-text);
+    border-radius: 1rem;
+}
+
+.delete-account-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.delete-account-heading svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-error-text);
+}
+
+.delete-account-heading h2 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: 1.125rem;
+}
+
+.delete-account-description {
+    margin: 0 0 1.25rem;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.delete-account-open,
+.delete-account-cancel,
+.delete-account-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    min-height: 2.875rem;
+    padding: 0.75rem 1rem;
+
+    border: none;
+    border-radius: 0.75rem;
+
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.delete-account-open,
+.delete-account-submit {
+    background-color: var(--color-error-background);
+    color: var(--color-error-text);
+}
+
+.delete-account-cancel {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+}
+
+.delete-account-open svg,
+.delete-account-cancel svg,
+.delete-account-submit svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+}
+
+.delete-account-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.delete-account-form h3 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: 1rem;
+}
+
+.delete-account-warning {
+    margin: 0;
+    padding: 0.875rem;
+
+    background-color: var(--color-error-background);
+    color: var(--color-error-text);
+
+    border-radius: 0.625rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.delete-account-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.delete-account-field label {
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.delete-account-password {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+
+    background-color: var(--color-background);
+    border: 0.0625rem solid var(--color-text-secondary);
+    border-radius: 0.625rem;
+}
+
+.delete-account-password:focus-within {
+    outline: 0.125rem solid var(--color-accent);
+    outline-offset: 0.125rem;
+}
+
+.delete-account-password input {
+    flex: 1;
+    min-width: 0;
+    min-height: 2.875rem;
+    padding: 0.75rem;
+
+    background-color: transparent;
+    color: var(--color-text-primary);
+
+    border: none;
+    outline: none;
+    font-size: 0.875rem;
+}
+
+.delete-account-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 2.875rem;
+    height: 2.875rem;
+    padding: 0;
+
+    background-color: transparent;
+    color: var(--color-text-secondary);
+
+    border: none;
+    cursor: pointer;
+}
+
+.delete-account-toggle svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.delete-account-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.delete-account-checkbox input {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: 0.125rem;
+    accent-color: var(--color-primary);
+}
+
+.delete-account-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.delete-account-actions button {
+    flex: 1;
+}
+
+.delete-account-error {
+    margin: 0;
+    padding: 0.875rem;
+
+    background-color: var(--color-error-background);
+    color: var(--color-error-text);
+
+    border-radius: 0.625rem;
+    font-size: 0.875rem;
+}
+
+.delete-account-section button:focus-visible,
+.delete-account-checkbox input:focus-visible {
+    outline: 0.125rem solid var(--color-accent);
+    outline-offset: 0.125rem;
+}
+
+.delete-account-section button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 25rem) {
+    .delete-account-section {
+        padding: 1rem;
+    }
+
+    .delete-account-actions {
+        flex-direction: column;
+    }
+
+    .delete-account-actions button {
+        width: 100%;
+    }
+}
