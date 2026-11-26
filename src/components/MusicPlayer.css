@@ -1,0 +1,222 @@
+.music-player {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 4.5rem;
+
+    z-index: 90;
+
+    padding: 0.75rem 1rem;
+
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+
+    border-top: 0.0625rem solid var(--color-primary);
+    box-shadow: 0 -0.25rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.music-player-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 75rem;
+    margin: 0 auto;
+}
+
+.music-player-song {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.music-player-cover {
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.music-player-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-background);
+}
+
+.music-player-placeholder svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-primary);
+}
+
+.music-player-info {
+    min-width: 0;
+}
+
+.music-player-title {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.music-player-genre {
+    margin: 0.25rem 0 0;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.music-player-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.music-player-controls button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+
+    background-color: transparent;
+    color: var(--color-text-primary);
+
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.music-player-controls button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.music-player-controls .music-player-play {
+    width: 2.75rem;
+    height: 2.75rem;
+
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+}
+
+.music-player-controls svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.music-player-bottom {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    max-width: 75rem;
+    margin: 0.625rem auto 0;
+}
+
+.music-player-time {
+    min-width: 2.25rem;
+    color: var(--color-text-secondary);
+    font-size: 0.6875rem;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+}
+
+.music-player-progress {
+    flex: 1;
+    min-width: 0;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+.music-player-volume {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.music-player-volume svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    color: var(--color-text-secondary);
+}
+
+.music-player-volume input {
+    width: 5rem;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+.music-player-error {
+    max-width: 75rem;
+    margin: 0.5rem auto 0;
+
+    color: var(--color-error-text);
+    font-size: 0.75rem;
+}
+
+.music-player button:focus-visible,
+.music-player input:focus-visible {
+    outline: 0.125rem solid var(--color-accent);
+    outline-offset: 0.125rem;
+}
+
+@media (max-width: 40rem) {
+    .music-player {
+        padding: 0.625rem 0.75rem;
+    }
+
+    .music-player-main {
+        gap: 0.5rem;
+    }
+
+    .music-player-song {
+        gap: 0.5rem;
+    }
+
+    .music-player-cover {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .music-player-info {
+        flex: 1;
+    }
+
+    .music-player-controls {
+        gap: 0.125rem;
+    }
+
+    .music-player-controls button {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .music-player-controls .music-player-play {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .music-player-volume {
+        display: none;
+    }
+
+    .music-player-bottom {
+        gap: 0.375rem;
+    }
+}

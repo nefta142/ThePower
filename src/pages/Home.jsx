@@ -327,9 +327,12 @@ function Home() {
                                 {songs.map((song) => (
                                     <SongCard
                                         key={song.idCancion}
+                                        id={song.idCancion}
                                         title={song.titulo}
                                         genre={song.genero}
                                         image={song.imagen}
+                                        audio={song.audio}
+                                        songs={songs}
                                     />
                                 ))}
                             </div>

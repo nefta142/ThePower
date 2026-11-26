@@ -195,6 +195,7 @@ function MySongs({ userId, refreshKey = 0 }) {
                                 title={song.titulo}
                                 genre={song.genero}
                                 image={song.imagen}
+                                showPlayer={false}
                             />
 
                             <div className="my-songs-actions">
